@@ -1,10 +1,8 @@
 package br.ifs.web1.model;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+
+
+import br.ifs.web1.dto.UsuarioDto;
 import lombok.*;
 
 @Getter
@@ -19,7 +17,7 @@ public class Usuario {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_usuario")
-    private int idUsuario;
+    private Integer idUsuario;
 	
 	@Column(name = "nome_usuario")
 	private String nomeUsuario;
@@ -33,11 +31,22 @@ public class Usuario {
 	@Column(name = "senha_usuario")
     private String senhaUsuario;
 	
-	@Column(name = "status_usuario")
+	@Column(name = "status")
     private String statusUsuario;
 	
 	@Column(name = "token_usuario")
     private String tokenUsuario;
 	
 	
+	 public UsuarioDto toUsuario() {
+		   return UsuarioDto.builder()
+	                .id_usuario(idUsuario)
+	                .nome_usuario(nomeUsuario)
+	                .login_usuario(loginUsuario)
+	                .email_usuario(emailUsuario)
+	                .senha_usuario(senhaUsuario)
+	                .status_usuario(statusUsuario)
+	                .token_usuario(tokenUsuario)
+	                .build();
+	}
 }
