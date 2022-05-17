@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 public class RuntimeService {
 
     public boolean validar(String token, String url){
-
+            if (token.trim().isEmpty()){
+                return false;
+            }
            return  true;
     }
 }

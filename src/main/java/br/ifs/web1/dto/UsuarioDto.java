@@ -1,7 +1,4 @@
 package br.ifs.web1.dto;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import javax.persistence.Column;
-
 import br.ifs.web1.model.Usuario;
 import lombok.*;
 

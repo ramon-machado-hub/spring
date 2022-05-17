@@ -1,5 +1,6 @@
 package br.ifs.web1.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import br.ifs.web1.dto.UsuarioDto;
@@ -38,23 +39,32 @@ public class UsuarioController {
 		return usuarioService.getById(id);
 	}
 
-	@GetMapping(value = "/getbyloginsenha")
+	@PostMapping(value = "/getbyloginsenha")
 	public Object getByLoginSenha(@RequestBody UsuarioDto usuario) {
-		return usuarioService.getByLoginSenha(usuario.getLogin_usuario(),
-				usuario.getSenha_usuario());
+		ResponseDefault response = new ResponseDefault();
+		try {
+			Usuario usu = usuarioService.getByLoginSenha(usuario.getLogin_usuario(),
+					usuario.getSenha_usuario());
+			if (usu!=null){
+				usuarioService.autenticate(usu);
+				response.setValue(true);
+				response.setCodigo(200);
+			}
+		}catch (Exception e) {
+			response.setCodigo(400);
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			response.setMensagem(e.getMessage());
+			response.setValue(false);
+		}
+		return response;
 	}
-
-//	@GetMapping(value = "/autenticacao")
-//	public boolean getByLogin(@RequestBody UsuarioDto usuario) throws Exception {
-//		return usuarioService.autenticacao(usuario.getEmail_usuario(),
-//				usuario.getSenha_usuario());
-//	}
 
 	@PostMapping(value = "/createusuario")
 	public Object criarUsuario(@RequestBody UsuarioDto usuario) {
 		ResponseDefault response = new ResponseDefault();
 		try {
-			usuarioService. create(usuario);
+			usuarioService.create(usuario);
 			response.setValue(true);
 			response.setCodigo(200);
 		} catch (Exception e) {

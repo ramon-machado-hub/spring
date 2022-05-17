@@ -8,9 +8,13 @@ import br.ifs.web1.model.Usuario;
 import java.util.List;
 
 @Repository
-public interface UsuarioRepository extends CrudRepository<Usuario, Integer>{
+public interface UsuarioRepository extends CrudRepository<Usuario, Integer> {
     List<Usuario> findByStatusUsuario(String status);
+
     Usuario findByEmailUsuario(String email);
+
     Usuario findByLoginUsuarioAndSenhaUsuario(String email, String senha);
-    Usuario findById(int id);
+
+    Usuario findByTokenUsuario(String token);
+//    UsuarioDto findByLoginAndSenha(String email, String senha);
 }

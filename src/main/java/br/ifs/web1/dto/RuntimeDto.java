@@ -1,4 +1,4 @@
-package br.ifs.web1.model;
+package br.ifs.web1.dto;
 
 import lombok.Getter;
 import lombok.Setter;
