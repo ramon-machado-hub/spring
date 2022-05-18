@@ -14,14 +14,14 @@ import br.ifs.web1.service.UsuarioService;
 @RestController
 @RequestMapping("/usuario")
 public class UsuarioController {
-	
-	 @Autowired
-	 UsuarioService usuarioService;
+
+	@Autowired
+	UsuarioService usuarioService;
 
 
 	@GetMapping(value = "/getTodos")
 	public List<Usuario> listar(){
-		return usuarioService.listar();		
+		return usuarioService.listar();
 	}
 
 	@GetMapping(value = "/getAtivos")
@@ -95,3 +95,4 @@ public class UsuarioController {
 	}
 
 }
+

@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface LogRepository extends CrudRepository<LogSystem, Integer> {
-    List<LogSystem> findByLogTxt(String exception);
+    List<LogSystem> getByLogTxt(String exception);
 
 }

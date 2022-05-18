@@ -14,12 +14,14 @@ public class LogService {
     @Autowired
     private LogRepository logRepository;
 
+    //testar
     public List<LogSystem> listar(){
         return (List<LogSystem>) logRepository.findAll();
     }
 
+    //testar
     public List<LogSystem> getByLogTxt(String exception) {
-        return logRepository.findByLogTxt(exception);
+        return logRepository.getByLogTxt(exception);
     }
 
     public void create(LogDto log) throws Exception {
