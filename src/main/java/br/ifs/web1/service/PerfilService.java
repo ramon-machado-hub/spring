@@ -22,9 +22,9 @@ public class PerfilService extends BaseService{
 
     public void create(PerfilDto perfil, String token) throws Exception {
         if (perfil == null){
-            throw new Exception("Perfil é obrigatório");
+            throw new Exception("Perfil = null");
         } else if (perfil.getNome_perfil()== null) {
-            throw new Exception("Nome do perfil não informado");
+            throw new Exception("Nome: campo nulo");
         }
         Optional<Usuario> opUsu = Optional.ofNullable(getUsuarioByToken(token));
         if(opUsu.isPresent()){

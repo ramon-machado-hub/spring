@@ -10,7 +10,8 @@ import lombok.Setter;
 @Setter
 @Builder
 @AllArgsConstructor
-public class TransacaoDto extends TokenDto{
+public class TransacaoDto extends TokenDto {
+
     private int id_transacao;
     private String nome_transacao;
     private String status_transacao;

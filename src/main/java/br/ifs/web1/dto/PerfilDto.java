@@ -1,7 +1,6 @@
 package br.ifs.web1.dto;
 
 import br.ifs.web1.model.Perfil;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

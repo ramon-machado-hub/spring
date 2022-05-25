@@ -12,6 +12,7 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 public class ServicoDto extends TokenDto{
+
     private int id_servico;
     private String nome_servico;
     private String status_servico;

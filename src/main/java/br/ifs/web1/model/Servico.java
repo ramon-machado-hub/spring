@@ -19,16 +19,16 @@ public class Servico {
     @Column(name = "id_servico")
     private int idServico;
 
-    @Column
+    @Column(name = "nome_servico")
     private String nomeServico;
 
-    @Column
+    @Column(name = "status_servico")
     private String statusServico;
 
-    @Column
+    @Column(name = "url_servico")
     private String urlServico;
 
-    @Column
+    @Column(name = "id_sistema")
     private int idSistema;
 
     public ServicoDto toServico(){

@@ -1,5 +1,6 @@
 package br.ifs.web1.repository;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -16,5 +17,7 @@ public interface UsuarioRepository extends CrudRepository<Usuario, Integer> {
     Usuario findByLoginUsuarioAndSenhaUsuario(String email, String senha);
 
     Usuario findByTokenUsuario(String token);
+
+
 //    UsuarioDto findByLoginAndSenha(String email, String senha);
 }

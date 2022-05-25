@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import br.ifs.web1.dto.RuntimeDto;
 import br.ifs.web1.dto.UsuarioDto;
 import br.ifs.web1.model.LogSystem;
 import br.ifs.web1.repository.LogRepository;
@@ -21,13 +22,14 @@ public class UsuarioService extends BaseService {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 
+	@Autowired
+	private RuntimeService runtimeService;
 
 	public List<Usuario> listar(){
 		return (List<Usuario>) usuarioRepository.findAll();
 	}
 
 	public Usuario getByEmail (String email){
-
 		return usuarioRepository.findByEmailUsuario(email);
 	}
 
@@ -39,12 +41,45 @@ public class UsuarioService extends BaseService {
 		return null;
 	}
 
-	public List<Usuario> getByAtivos(String status){
-		return usuarioRepository.findByStatusUsuario(status);
+	public List<Usuario> getByAtivos(String token) throws Exception{
+		System.out.println(
+				"token = "+token
+		);
+		//Usuario usu = getUsuarioByToken(token);
+		Optional<Usuario> opUsu = Optional.ofNullable(getUsuarioByToken(token));
+
+//		if (usu!=null){
+		if (opUsu.isPresent()){
+			System.out.println("entrou");
+			System.out.println(
+					"usu = "+opUsu.get().getNomeUsuario()
+			);
+			RuntimeDto runtimeDto = new RuntimeDto();
+			runtimeDto.setToken(token);
+			runtimeDto.setUrl("localhost:8080/usuario/getAtivos");
+			if (runtimeService.validar(runtimeDto,opUsu.get().getIdUsuario())){
+				System.out.println("validou");
+				return usuarioRepository.findByStatusUsuario("A");
+			} else {
+				System.out.println("não validou");
+				throw new Exception("Usuario naao encontrado");
+			}
+		}else {
+			throw new Exception("Usuario nao encontrado");
+		}
 	}
 
-	public Usuario getByLoginSenha(String login, String senha) {
-		return usuarioRepository.findByLoginUsuarioAndSenhaUsuario(login, senha);
+	public Usuario getByLoginSenha(String login, String senha) throws Exception{
+		Usuario usu = usuarioRepository.findByLoginUsuarioAndSenhaUsuario(login, senha);
+		if (usu!=null) {
+			Date data = new Date();
+			Date expira = new Date(data.getTime()+30);
+			usu.setTokenUsuario(data.toString());
+			usuarioRepository.save(usu);
+		} else {
+			throw new Exception("Usuário não encontrado");
+		}
+		return usu;
 	}
 
 	public void create(UsuarioDto usuario) throws Exception {
@@ -57,7 +92,7 @@ public class UsuarioService extends BaseService {
 			throw new Exception("Email do Usuário é obrigatório");
 		} else if(usuario.getSenha_usuario() == null  || usuario.getSenha_usuario().length()<6){
 			throw new Exception("Senha deve conter pelo menos 6 caracteres");
-		} else if (usuario.getToken_usuario().trim().isEmpty()==false){
+		} else if (!usuario.getToken_usuario().trim().isEmpty()){
 			throw new Exception("Token não deve ser preenchido no cadastro");
 		}
 
@@ -66,17 +101,17 @@ public class UsuarioService extends BaseService {
 		criarLog(usu.getIdUsuario(),"create_usuario");
 	}
 
-	public void autenticate (Usuario usuario){
-		Optional<Usuario> opUsu = usuarioRepository.findById(usuario.getIdUsuario());
-		Date hoje = new Date();
-		Date dataExpiracao = new Date(hoje.getTime() + 300000);
-		if(opUsu.isPresent()){
-			Usuario usuBD = opUsu.get();
-			usuBD.setTokenUsuario(dataExpiracao.toString());
-			criarLog(usuBD.getIdUsuario(),"autenticate");
-			usuarioRepository.save(usuBD);
-		}
-	}
+//	public void autenticate (Usuario usuario){
+//		Optional<Usuario> opUsu = usuarioRepository.findById(usuario.getIdUsuario());
+//		Date hoje = new Date();
+//		Date dataExpiracao = new Date(hoje.getTime() + 300000);
+//		if(opUsu.isPresent()){
+//			Usuario usuBD = opUsu.get();
+//			usuBD.setTokenUsuario(dataExpiracao.toString());
+//			criarLog(usuBD.getIdUsuario(),"autenticate");
+//			usuarioRepository.save(usuBD);
+//		}
+//	}
 
 
 	public void update(Usuario usuario) {

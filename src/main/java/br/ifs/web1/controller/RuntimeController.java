@@ -17,7 +17,7 @@ public class RuntimeController {
 
     @PostMapping(value = "/autorized")
     public Object autorizacao(@RequestBody RuntimeDto runtime){
-            return runtimeService.validar(runtime.getToken(), runtime.getUrl());
+            return runtimeService.validar(runtime,1);
     }
 
 }

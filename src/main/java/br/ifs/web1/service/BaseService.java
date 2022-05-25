@@ -31,9 +31,12 @@ public class BaseService {
     //método que retorna o Usuario pelo token
     public Usuario getUsuarioByToken(String token) {
             Optional<Usuario> opUsu = Optional.ofNullable(usuarioRepository.findByTokenUsuario(token));
+            System.out.println(token);
             if (opUsu.isPresent()) {
+                System.out.println("presente");
                 return opUsu.get();
             }
+              System.out.println("ausente");
             return null;
     }
 }

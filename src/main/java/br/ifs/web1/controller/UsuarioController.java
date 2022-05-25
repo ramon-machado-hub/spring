@@ -3,6 +3,7 @@ package br.ifs.web1.controller;
 import java.util.Date;
 import java.util.List;
 
+import br.ifs.web1.dto.TokenDto;
 import br.ifs.web1.dto.UsuarioDto;
 import br.ifs.web1.util.ResponseDefault;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +22,21 @@ public class UsuarioController {
 
 	@GetMapping(value = "/getTodos")
 	public List<Usuario> listar(){
+
 		return usuarioService.listar();
 	}
 
 	@GetMapping(value = "/getAtivos")
-	public List<Usuario> getByStatus(@RequestBody String status){
-		return usuarioService.getByAtivos(status);
+	public Object getByStatus(@RequestBody TokenDto token) {
+		ResponseDefault response = new ResponseDefault();
+		try {
+			return usuarioService.getByAtivos(token.getToken());
+		}catch (Exception e){
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+			return response;
+		}
+
 	}
 
 	@GetMapping(value = "/byEmail")
@@ -46,8 +56,7 @@ public class UsuarioController {
 			Usuario usu = usuarioService.getByLoginSenha(usuario.getLogin_usuario(),
 					usuario.getSenha_usuario());
 			if (usu!=null){
-				usuarioService.autenticate(usu);
-				response.setValue(true);
+				response.setValue(usu.getTokenUsuario());
 				response.setCodigo(200);
 			}
 		}catch (Exception e) {
@@ -93,6 +102,7 @@ public class UsuarioController {
 		}
 		return response;
 	}
+
 
 }
 

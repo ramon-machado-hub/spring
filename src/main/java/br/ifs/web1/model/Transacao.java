@@ -30,7 +30,7 @@ public class Transacao {
     @Column(name = "id_servico")
     private int idServico;
 
-    public TransacaoDto toTransacao() {
+    public TransacaoDto toTransacaoDto(){
         return TransacaoDto.builder()
                 .id_transacao(idTransacao)
                 .nome_transacao(nomeTransacao)
