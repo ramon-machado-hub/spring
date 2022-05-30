@@ -6,15 +6,10 @@ import java.util.Optional;
 
 import br.ifs.web1.dto.RuntimeDto;
 import br.ifs.web1.dto.UsuarioDto;
-import br.ifs.web1.model.LogSystem;
-import br.ifs.web1.repository.LogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import br.ifs.web1.model.Usuario;
 import br.ifs.web1.repository.UsuarioRepository;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 public class UsuarioService extends BaseService {
@@ -29,26 +24,13 @@ public class UsuarioService extends BaseService {
 		return (List<Usuario>) usuarioRepository.findAll();
 	}
 
-	public Usuario getByEmail (String email){
-		return usuarioRepository.findByEmailUsuario(email);
-	}
-
-	public Usuario getById (int id){
-		Optional<Usuario> opUsu = usuarioRepository.findById(id);
-		if (opUsu.isPresent()) {
-			return opUsu.get();
-		}
-		return null;
-	}
 
 	public List<Usuario> getByAtivos(String token) throws Exception{
 		System.out.println(
 				"token = "+token
 		);
-		//Usuario usu = getUsuarioByToken(token);
 		Optional<Usuario> opUsu = Optional.ofNullable(getUsuarioByToken(token));
 
-//		if (usu!=null){
 		if (opUsu.isPresent()){
 			System.out.println("entrou");
 			System.out.println(
@@ -82,6 +64,7 @@ public class UsuarioService extends BaseService {
 		return usu;
 	}
 
+	//alterar para Usuario
 	public void create(UsuarioDto usuario) throws Exception {
 		if (usuario == null) {
 			throw new Exception("Usuário é obrigatório");
@@ -101,29 +84,31 @@ public class UsuarioService extends BaseService {
 		criarLog(usu.getIdUsuario(),"create_usuario");
 	}
 
-//	public void autenticate (Usuario usuario){
-//		Optional<Usuario> opUsu = usuarioRepository.findById(usuario.getIdUsuario());
-//		Date hoje = new Date();
-//		Date dataExpiracao = new Date(hoje.getTime() + 300000);
-//		if(opUsu.isPresent()){
-//			Usuario usuBD = opUsu.get();
-//			usuBD.setTokenUsuario(dataExpiracao.toString());
-//			criarLog(usuBD.getIdUsuario(),"autenticate");
-//			usuarioRepository.save(usuBD);
-//		}
-//	}
 
-
-	public void update(Usuario usuario) {
-		Optional<Usuario> opUsu = usuarioRepository.findById(usuario.getIdUsuario());
-		if (opUsu.isPresent()) {
-			Usuario usuBD = opUsu.get();
-			usuBD.setEmailUsuario(usuario.getEmailUsuario());
-			usuBD.setNomeUsuario(usuario.getNomeUsuario());
-			usuBD.setSenhaUsuario(usuario.getSenhaUsuario());
-			usuBD.setStatusUsuario(usuario.getStatusUsuario());
-			criarLog(usuario.getIdUsuario(),"update_usuario");
-			usuarioRepository.save(usuBD);
+	public void update(UsuarioDto usuario) {
+		if(!usuario.getToken_usuario().trim().isEmpty()){
+			Optional<Usuario> opUsu = Optional.ofNullable(getUsuarioByToken(usuario.getToken_usuario()));
+			if (opUsu.isPresent()) {
+				RuntimeDto runtimeDto = new RuntimeDto();
+				runtimeDto.setToken(usuario.getToken_usuario());
+				runtimeDto.setUrl("localhost:8080/usuario/updateUsuario");
+				if (runtimeService.validar(runtimeDto,opUsu.get().getIdUsuario())) {
+					System.out.println("validou");
+					Usuario usuBD = opUsu.get();
+					usuBD.setEmailUsuario(usuario.getEmail_usuario());
+					usuBD.setNomeUsuario(usuario.getNome_usuario());
+					usuBD.setSenhaUsuario(usuario.getSenha_usuario());
+					usuBD.setStatusUsuario(usuario.getStatus_usuario());
+					//pega o usuario do token que solicitou a transação
+					Usuario usu = usuarioRepository.findByTokenUsuario(runtimeDto.getToken());
+					criarLog(usu.getIdUsuario(), "update_usuario");
+					usuarioRepository.save(usuBD);
+					System.out.println("alterou");
+				}else{
+					System.out.println("não validou");
+				}
+			}
 		}
+
 	}
 }

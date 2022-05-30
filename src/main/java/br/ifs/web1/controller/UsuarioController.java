@@ -39,16 +39,6 @@ public class UsuarioController {
 
 	}
 
-	@GetMapping(value = "/byEmail")
-	public Object getByEmail(@RequestBody String email) {
-		return usuarioService.getByEmail(email);
-	}
-
-	@GetMapping(value = "/byId")
-	public Object getById(@RequestBody int id) {
-		return usuarioService.getById(id);
-	}
-
 	@PostMapping(value = "/getbyloginsenha")
 	public Object getByLoginSenha(@RequestBody UsuarioDto usuario) {
 		ResponseDefault response = new ResponseDefault();
@@ -87,9 +77,10 @@ public class UsuarioController {
 	}
 
 	@PutMapping(value = "/updateUsuario")
-	public Object alterarUsuario(@RequestBody Usuario usuario) {
+	public Object alterarUsuario(@RequestBody UsuarioDto usuario) {
 		ResponseDefault response = new ResponseDefault();
 		try {
+//		/	if (getUsua usuario.getToken_usuario())
 			usuarioService.update(usuario);
 			response.setValue(true);
 			response.setCodigo(200);

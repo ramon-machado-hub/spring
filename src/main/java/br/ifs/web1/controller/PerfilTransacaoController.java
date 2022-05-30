@@ -1,6 +1,7 @@
 package br.ifs.web1.controller;
 
 import br.ifs.web1.dto.PerfilTransacaoDto;
+import br.ifs.web1.dto.TokenDto;
 import br.ifs.web1.model.PerfilTransacao;
 import br.ifs.web1.service.PerfilTransacaoService;
 import br.ifs.web1.util.ResponseDefault;
@@ -17,11 +18,33 @@ public class PerfilTransacaoController {
     PerfilTransacaoService perfilTransacaoService;
 
     @GetMapping(value = "/getAll")
-    public List<PerfilTransacao> listar(){
-        return perfilTransacaoService.findAllPerTran();
+    public Object listar(@RequestBody TokenDto tokenDto)
+    {
+        ResponseDefault response = new ResponseDefault();
+        try {
+            return perfilTransacaoService.findAllPerTran(tokenDto);
+        }catch (Exception e ){
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            return response;
+        }
     }
 
-    @PostMapping(value = "/createpertran")
+//    @GetMapping(value = "/getAll")
+//    public Object listar(@RequestBody TokenDto tokenDto){
+//        ResponseDefault response = new ResponseDefault();
+//        try {
+//            return transacaoService.findAllTransacao(tokenDto);
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            System.out.println(e.getMessage());
+//            return response;
+//        }
+//
+//
+//    }
+
+    @PostMapping(value = "/createperfiltransacao")
     public Object criarPerfilTransacao(@RequestBody PerfilTransacaoDto perfilTransacaoDto){
         ResponseDefault response = new ResponseDefault();
         try {

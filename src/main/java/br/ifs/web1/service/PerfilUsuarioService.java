@@ -1,6 +1,7 @@
 package br.ifs.web1.service;
 
 import br.ifs.web1.dto.PerfilUsuarioDto;
+import br.ifs.web1.dto.RuntimeDto;
 import br.ifs.web1.model.Perfil;
 import br.ifs.web1.model.Usuario;
 import br.ifs.web1.repository.PerfilUsuarioRepository;
@@ -15,6 +16,9 @@ public class PerfilUsuarioService extends  BaseService{
     @Autowired
     PerfilUsuarioRepository perfilUsuarioRepository;
 
+    @Autowired
+    RuntimeService runtimeService;
+
     public void create(PerfilUsuarioDto perfilUsuarioDto) throws Exception{
         if (perfilUsuarioDto == null){
             throw new Exception("perfilUsuario não pode ser nulo");
@@ -28,8 +32,16 @@ public class PerfilUsuarioService extends  BaseService{
 
         Optional<Usuario> opUsu = Optional.ofNullable(getUsuarioByToken(perfilUsuarioDto.getToken()));
         if(opUsu.isPresent()){
-            criarLog(perfilUsuarioDto.getId_usuario(),"create_perfil_usuario");
-            perfilUsuarioRepository.save(perfilUsuarioDto.toPerfilUsuario());
+            RuntimeDto runtimeDto = new RuntimeDto();
+            runtimeDto.setToken(perfilUsuarioDto.getToken());
+            runtimeDto.setUrl("localhost:8080/perfilusuario/createperfilusuario");
+            if (runtimeService.validar(runtimeDto, opUsu.get().getIdUsuario())){
+                criarLog(perfilUsuarioDto.getId_usuario(),"create_perfil_usuario");
+                perfilUsuarioRepository.save(perfilUsuarioDto.toPerfilUsuario());
+            } else {
+                throw new Exception("Usuário não tem permissão para essa transação");
+            }
+
         } else {
             throw new Exception("Token inválido");
         }

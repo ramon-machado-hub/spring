@@ -12,7 +12,7 @@ import java.util.List;
 public interface UsuarioRepository extends CrudRepository<Usuario, Integer> {
     List<Usuario> findByStatusUsuario(String status);
 
-    Usuario findByEmailUsuario(String email);
+//    Usuario findByEmailUsuario(String email);
 
     Usuario findByLoginUsuarioAndSenhaUsuario(String email, String senha);
 
