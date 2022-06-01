@@ -24,7 +24,7 @@ public class PerfilController {
     public Object criarPerfil(@RequestBody PerfilDto perfil){
         ResponseDefault response = new ResponseDefault();
         try {
-            perfilService.create(perfil, perfil.getToken());
+            perfilService.create(perfil);
             response.setValue(true);
             response.setCodigo(200);
         } catch (Exception e){
