@@ -2,12 +2,16 @@ package br.ifs.web1.service;
 
 import br.ifs.web1.dto.PerfilUsuarioDto;
 import br.ifs.web1.dto.RuntimeDto;
+import br.ifs.web1.dto.TokenDto;
 import br.ifs.web1.model.Perfil;
+import br.ifs.web1.model.PerfilUsuario;
+import br.ifs.web1.model.Transacao;
 import br.ifs.web1.model.Usuario;
 import br.ifs.web1.repository.PerfilUsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -43,6 +47,23 @@ public class PerfilUsuarioService extends  BaseService{
             }
 
         } else {
+            throw new Exception("Token inválido");
+        }
+    }
+
+    public List<PerfilUsuario> getAllPerfilUsuario(TokenDto tokenDto) throws Exception{
+        Optional<Usuario> opUsu = Optional.ofNullable(getUsuarioByToken(tokenDto.getToken()));
+        if (opUsu.isPresent()){
+            RuntimeDto runtimeDto = new RuntimeDto();
+            runtimeDto.setToken(tokenDto.getToken());
+            runtimeDto.setUrl("localhost:8080/perfilusuario/getall");
+            if (runtimeService.validar(runtimeDto,opUsu.get().getIdUsuario())){
+                criarLog(opUsu.get().getIdUsuario(),"get_all_perfilusuario");
+                return (List<PerfilUsuario>) perfilUsuarioRepository.findAll();
+            } else {
+                throw new Exception("Usuário não tem permissão para essa transação");
+            }
+        }else {
             throw new Exception("Token inválido");
         }
     }

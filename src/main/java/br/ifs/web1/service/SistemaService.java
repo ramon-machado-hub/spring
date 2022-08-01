@@ -2,6 +2,7 @@ package br.ifs.web1.service;
 
 import br.ifs.web1.dto.RuntimeDto;
 import br.ifs.web1.dto.SistemaDto;
+import br.ifs.web1.dto.TokenDto;
 import br.ifs.web1.model.Servico;
 import br.ifs.web1.model.Sistema;
 import br.ifs.web1.model.Usuario;
@@ -9,6 +10,7 @@ import br.ifs.web1.repository.SistemaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,6 +20,28 @@ public class SistemaService extends BaseService{
 
     @Autowired
     private RuntimeService runtimeService;
+
+
+
+    public List<Sistema> getAllSistema(String token) throws Exception {
+        Optional<Usuario> opUsu = Optional.ofNullable(getUsuarioByToken(token));
+        if (opUsu.isPresent()){
+            RuntimeDto runtimeDto = new RuntimeDto();
+            runtimeDto.setToken(token);
+            runtimeDto.setUrl("localhost:8080/sistema/getsistemas");
+            if (runtimeService.validar(runtimeDto,opUsu.get().getIdUsuario())) {
+                System.out.println("validou getsistemas");
+                return sistemaRepository.findAll();
+            } else {
+                System.out.println("não validou runtimeService");
+                throw new Exception("Usuário naao encontrado");
+            }
+        } else {
+            System.out.println("não validou token");
+            throw new Exception("Usuário naao encontrado");
+        }
+    }
+
 
     public void create(SistemaDto sistema) throws Exception{
         if (sistema == null){

@@ -28,6 +28,18 @@ public class TransacaoController {
             System.out.println(e.getMessage());
             return response;
         }
+    }
+
+    @PostMapping(value = "/gettransacoes")
+    public Object listarTransacoes(@RequestBody TokenDto tokenDto){
+        ResponseDefault response = new ResponseDefault();
+        try {
+            return transacaoService.findAllTransacao(tokenDto);
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            return response;
+        }
 
 
     }

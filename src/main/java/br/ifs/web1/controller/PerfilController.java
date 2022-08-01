@@ -1,6 +1,7 @@
 package br.ifs.web1.controller;
 
 import br.ifs.web1.dto.PerfilDto;
+import br.ifs.web1.dto.TokenDto;
 import br.ifs.web1.model.Perfil;
 import br.ifs.web1.service.PerfilService;
 import br.ifs.web1.util.ResponseDefault;
@@ -18,6 +19,18 @@ public class PerfilController {
     @GetMapping(value = "/getAllPerfil")
     public List<Perfil> listar(){
         return perfilService.listar();
+    }
+
+    @PostMapping(value = "/getperfis")
+    public Object ListarPerfis(@RequestBody TokenDto tokenDto){
+        ResponseDefault response = new ResponseDefault();
+        try {
+            return perfilService.findAllPerfis(tokenDto);
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            return response;
+        }
     }
 
     @PostMapping(value = "/createperfil")

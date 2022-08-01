@@ -24,10 +24,13 @@ public class PerfilTransacaoService extends BaseService{
     public List<PerfilTransacao> findAllPerTran(TokenDto tokenDto) throws Exception{
         Optional<Usuario> opUsu = Optional.ofNullable(getUsuarioByToken(tokenDto.getToken()));
         if (opUsu.isPresent()){
+            System.out.println("token1111");
             RuntimeDto runtimeDto = new RuntimeDto();
             runtimeDto.setToken(tokenDto.getToken());
             runtimeDto.setUrl("localhost:8080/perfiltransacao/getall");
             if (runtimeService.validar(runtimeDto,opUsu.get().getIdUsuario())) {
+                System.out.println("entrou");
+                criarLog(opUsu.get().getIdUsuario(),"get_all_perfiltransacao");
                 return (List<PerfilTransacao>) perfilTransacaoRepository.findAll();
 
             } else {
@@ -35,6 +38,7 @@ public class PerfilTransacaoService extends BaseService{
             }
 
         } else {
+            System.out.println("token");
             throw new Exception("Token inválido");
         }
     }

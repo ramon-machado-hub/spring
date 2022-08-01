@@ -1,6 +1,7 @@
 package br.ifs.web1.controller;
 
 import br.ifs.web1.dto.ServicoDto;
+import br.ifs.web1.dto.TokenDto;
 import br.ifs.web1.service.ServicoService;
 import br.ifs.web1.util.ResponseDefault;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,4 +46,32 @@ public class ServicoController {
         }
         return response;
     }
+
+    @PostMapping(value = "/getservicos")
+    public Object ListarServicos(@RequestBody TokenDto tokenDto){
+        ResponseDefault response = new ResponseDefault();
+        try {
+            return servicoService.findAllServico(tokenDto);
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            return response;
+        }
+    }
+    /*
+        @PostMapping(value = "/gettransacoes")
+        public Object listarTransacoes(@RequestBody TokenDto tokenDto){
+            ResponseDefault response = new ResponseDefault();
+            try {
+                return transacaoService.findAllTransacao(tokenDto);
+            }catch (Exception e){
+                e.printStackTrace();
+                System.out.println(e.getMessage());
+                return response;
+            }
+
+
+        }
+     */
+
 }

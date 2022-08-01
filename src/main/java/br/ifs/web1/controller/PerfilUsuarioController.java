@@ -1,6 +1,7 @@
 package br.ifs.web1.controller;
 
 import br.ifs.web1.dto.PerfilUsuarioDto;
+import br.ifs.web1.dto.TokenDto;
 import br.ifs.web1.service.PerfilUsuarioService;
 import br.ifs.web1.util.ResponseDefault;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,4 +32,19 @@ public class PerfilUsuarioController {
         }
         return response;
     }
+
+    @PostMapping(value = "/getall")
+    public Object getPerfilUsuario(@RequestBody TokenDto tokenDto){
+        ResponseDefault response = new ResponseDefault();
+        try {
+           return perfilUsuarioService.getAllPerfilUsuario(tokenDto);
+        } catch (Exception e){
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            return response;
+        }
+
+    }
+
+
 }

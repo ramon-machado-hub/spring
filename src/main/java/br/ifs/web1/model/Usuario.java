@@ -22,7 +22,7 @@ public class Usuario {
 	@Column(name = "nome_usuario")
 	private String nomeUsuario;
 	
-	@Column(name = "login_usuario")
+	@Column(unique = true)
     private String loginUsuario;
 	
 	@Column(name = "email_usuario")

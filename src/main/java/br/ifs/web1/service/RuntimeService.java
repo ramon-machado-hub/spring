@@ -28,8 +28,8 @@ public class RuntimeService extends BaseService{
                 System.out.println("lista com itens");
             }
             for (Transacao item : list){
-                System.out.println("item"+item.getUrlTransacao());
-                System.out.println("runtime"+runtimeDto.getUrl());
+                System.out.println("item "+item.getUrlTransacao());
+                System.out.println("runtime "+runtimeDto.getUrl());
                 System.out.println(item.getUrlTransacao().equals(runtimeDto.getUrl()));
 
                 if (item.getUrlTransacao().equals(runtimeDto.getUrl())){

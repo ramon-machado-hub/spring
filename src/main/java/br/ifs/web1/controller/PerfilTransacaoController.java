@@ -17,9 +17,10 @@ public class PerfilTransacaoController {
     @Autowired
     PerfilTransacaoService perfilTransacaoService;
 
-    @GetMapping(value = "/getAll")
+    @PostMapping(value = "/getall")
     public Object listar(@RequestBody TokenDto tokenDto)
     {
+        System.out.println("getperfil transacao");
         ResponseDefault response = new ResponseDefault();
         try {
             return perfilTransacaoService.findAllPerTran(tokenDto);
